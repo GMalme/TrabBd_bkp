@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #6C7A89;
+        }
+        body {
+      background-color: #6C7A89;
+    }
+
+    ::-webkit-input-placeholder {
+      /* WebKit, Blink, Edge */
+      color: #909;
+    }
+
+    :-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #909;
+      opacity: 1;
+    }
+
+    ::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #909;
+      opacity: 1;
+    }
+
+    :-ms-input-placeholder {
+      /* Internet Explorer 10-11 */
+      color: #909;
+    }
+
+    ::-ms-input-placeholder {
+      /* Microsoft Edge */
+      color: #909;
+    }
+
+    ::placeholder {
+      /* Most modern browsers support this now. */
+      color: #909;
+    }
+
+
+    </style>
+    <title>VER DEPOIS!!</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="home">{{sess}}</a>
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="logoutG">Alterar jogo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout">Sair</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex input-group w-auto" action="/home" method="POST">
+                        <input type="search" name="pesq" class="form-control" placeholder='{{aviso}}'
+                            aria-label="Search" />
+                        <form action="/home" method="POST">
+                            <button class="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark"
+                                name="btnP" value="Partida">
+                                Partida
+                            </button>
+                            <button class="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark"
+                                name="btnP" value="Conta">
+                                Conta
+                            </button>
+                        </form>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- inicio do body -->
+    <div class="container">
+        <div class="box">
+
+            <div class="dados">
+                <h3>nome: {{data[0][1]}}</h3>
+                <h4>user: {{data[0][2]}}</h4>
+                <h4>email: {{data[0][5]}}</h4>
+                <h4>ativo: {{data[0][4]}}</h4>
+                <h4>ativo: {{jog}}</h4>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                crossorigin="anonymous"></script>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<style>
+    .container {
+        width: 100vw;
+        height: 100vh;
+        background: #6C7A89;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .box {
+        width: 400px;
+        height: 500px;
+        background: #fff;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dados {
+        text-align: center;
+    }
+
+
+
+    body {
+        margin: 0px;
+
+
+    }
+</style>
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #6C7A89;
+        }
+    </style>
+    <title>Para!!!!</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="home">{{sess}}</a>
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="logoutG">Alterar jogo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout">Sair</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex input-group w-auto" action="/home" method="POST">
+                        <div class="err">
+
+                        </div>
+                        <input type="search" class="form-control"
+                            placeholder="Usuario não encontrado!" aria-label="Search" />
+
+                        <form action="/home" method="POST">
+                            <button class="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark"
+                                name="btnP" value="Partida">
+                                Partida
+                            </button>
+                            <button class="btn btn-outline-primary" type="submit" data-mdb-ripple-color="dark"
+                                name="btnP" value="Conta">
+                                Conta
+                            </button>
+                        </form>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- inicio do body -->
+    <div class="container">
+        <div class="box">
+
+            <div class="dados">
+                <h3>nome: {{data[0][1]}}</h3>
+                <h4>user: {{data[0][2]}}</h4>
+                <h4>email: {{data[0][5]}}</h4>
+                <h4>ativo: {{data[0][4]}}</h4>
+                <h4>ativo: {{jog}}</h4>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+                crossorigin="anonymous"></script>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<style>
+    .container {
+        width: 100vw;
+        height: 100vh;
+        background: #6C7A89;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .box {
+        width: 400px;
+        height: 500px;
+        background: #fff;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .dados {
+        text-align: center;
+    }
+
+    body {
+        margin: 0px;
+    }
+</style>
