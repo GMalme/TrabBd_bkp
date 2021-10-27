@@ -9,13 +9,15 @@ from markupsafe import escape
 from datetime import timedelta
 from flask_cors import CORS 
 
+import crud
+
 app = Flask(__name__, static_url_path='/static')
 app.secret_key = "test"
 app.permanent_session_lifetime = timedelta(minutes=5)
 CORS(app) 
-
 # app.config["SESSION_PERMANENT"] = True
 cmx = MySQL(app)
+import crud
 
 @app.route("/")
 def helloworld():
@@ -44,9 +46,8 @@ def login():
             if 'Jogo' in session:
                 cursor = cmx.connection.cursor()
                 aux = session["User"]
-                string_sql = f"SELECT * FROM usuario WHERE nome_de_usuario = '{aux}'"
-                cursor.execute(string_sql)
-                data = cursor.fetchall()
+                data = crud.seleciona_um("usuario",aux)
+                print("data=",data)
                 session["aviso"] = "Pesquisar"
                 typeP = request.form.get("btnP")
                 print("tp:",typeP)
@@ -78,24 +79,19 @@ def login():
     if request.method == "POST":
         session.permanent = True
         try:
-            print("TENTO")
             nomeUser = request.form.get("nomeUser")
             senhaUser = request.form.get("senhaUser")
-            cursor = cmx.connection.cursor()
-            string_sql = f"SELECT nome_de_usuario,senha FROM usuario WHERE nome_de_usuario = '{nomeUser}'"
-            cursor.execute(string_sql)
-            senha = cursor.fetchall()
+            senha = crud.seleciona_um("usuario", nomeUser)
+            print("senha",senha)
             if senha == ():
                 print("usuario não encontrado!")
-                alerta = "usuario não encontrado!"
-                return  render_template("TelaR.html", data=alerta)
-            elif senha!= None and senha[0][1] == senhaUser and nomeUser!=None:
+                return  render_template("TelaR.html", data="usuario não encontrado!")
+            elif senha!= None and senha[0][3] == senhaUser and nomeUser!=None:
                 session["User"] = nomeUser
                 return redirect(url_for("login"))
             else:
                 print("senha invalida")
-                alerta = "Senha invalida!"
-                return  render_template("TelaR.html", data=alerta)
+                return  render_template("TelaR.html", data="Senha invalida!")
 
         except Exception as ax:
             print(ax)
@@ -176,18 +172,10 @@ def telaAdm():
 def CadastroUsuario():
     if request.method == "POST":
         try:
-            nomeUser = request.form.get("nomeUser")
-            nomeComp = request.form.get("nomeComp")
-            email = request.form.get("email")
-            senha = request.form.get("senha")
-            if nomeUser != "" and senha != "":
-                cursor = cmx.connection.cursor()
-                string_sql = f"INSERT INTO usuario (email,senha,nome,nome_de_usuario,status_user) VALUES ('{email}','{senha}','{nomeUser}','{nomeComp}','true')"
-                cursor.execute(string_sql)
-                cmx.connection.commit()
-            else:
-                print("usuario vazio")
-            return  render_template("TelaLogin.html")
+            alerta = crud.adiciona("usuario",[request.form.get("nomeUser"), request.form.get("nomeComp"), request.form.get("email"), request.form.get("senha")])
+            print(alerta)
+            if alerta[0] == 200:
+                return  render_template("TelaLogin.html")
         except Exception as ax:
             print(ax)
     return  render_template("CadastroUsuario.html")
