@@ -7,17 +7,19 @@ from flask import Flask
 from flask import request,session,url_for,redirect,send_from_directory
 from markupsafe import escape
 from datetime import timedelta
+from flask_cors import CORS 
 
 app = Flask(__name__, static_url_path='/static')
 app.secret_key = "test"
 app.permanent_session_lifetime = timedelta(minutes=5)
+CORS(app) 
 
 # app.config["SESSION_PERMANENT"] = True
 cmx = MySQL(app)
 
 @app.route("/")
-def index():
-    return redirect(url_for("login"))
+def helloworld():
+    return "Hello, cross-origin-world"
 
 @app.route("/logout")
 def logout():
@@ -198,10 +200,17 @@ def CadastroJogo():
 def pbt():
     return  render_template("pb.html")
 
-@app.route("/load/<tabela>",methods=["GET","POST"])
-def load(tabela):
-    print("tabela:",tabela)
-    return  render_template("/tabelasAdm/" + tabela +  ".html")
+@app.route("/load/<tabela>",methods=["GET","POST"]) 
+def load(tabela): 
+    print("tabela:",tabela) 
+    headings = ("name", "role", "salario") 
+    data =( 
+        ("rolf","software eng","400"), 
+        ("juca","mecanico","2200"), 
+        ("hugo","goleiro","600"), 
+        ("rafa","motovlog","2600") 
+    ) 
+    return  render_template("/tabelasAdm/" + tabela +  ".html",data=data, headings=headings)
 
 
 @app.route('/js/<path:path>')
