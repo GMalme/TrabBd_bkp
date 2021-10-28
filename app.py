@@ -44,7 +44,6 @@ def logoutA():
 def login():
     if  'User' in session:
             if 'Jogo' in session:
-                cursor = cmx.connection.cursor()
                 aux = session["User"]
                 data = crud.seleciona_um("usuario",aux)
                 print("data=",data)
@@ -55,6 +54,7 @@ def login():
                 if dataP != "" and typeP == "Conta":
                     try:
                         print(dataP)
+                        cursor = cmx.connection.cursor()
                         string_sql = f"SELECT * FROM usuario WHERE nome_de_usuario = '{dataP}'"
                         cursor.execute(string_sql)
                         dataP = cursor.fetchall()
@@ -100,31 +100,18 @@ def login():
 @app.route("/CadastroAdmin",methods=["GET","POST"])
 def CadastroAdmin():
     if request.method == "POST":
-        nomeComp = request.form.get("nomeComp")
-        nomeUser = request.form.get("nomeUser")
-        email = request.form.get("email")
-        senha = request.form.get("senha")
         acessKey = request.form.get("acessKey")
-        if acessKey=="" or acessKey.find(":")==-1:
+        if acessKey.find(":")==-1 or acessKey == ":":
             print("formato invalido")
         else:
             id = acessKey.split(":")
-            print(id)
-            cursor = cmx.connection.cursor()
-            string_sql = f"SELECT chave FROM administrador WHERE IDadministrador = '{id[0]}'"
-            cursor.execute(string_sql)
-            chave = cursor.fetchall()
+            chave = crud.seleciona_um(id[0],"chave")
             if id == None or chave == ():
                print("chave sem correspondencia")
             elif chave[0][0] == id[1]:
-                print("chave aceita!")
-                cursor = cmx.connection.cursor()
-                string_sql = f"UPDATE administrador SET nome = '{nomeComp}', user = '{nomeUser}',  senha = '{senha}', email='{email}' WHERE IDadministrador = {id[0]}"
-                cursor.execute(string_sql)
-                cmx.connection.commit()
-                # print(string_sql)
-                # print(ADICIONAR FLAGS!!!!)
-                return redirect(url_for("loginAdm"))
+                val = crud.atualiza('administrador',(request.form.get("nomeUser"),request.form.get("nomeComp"),request.form.get("senha"),request.form.get("email")),id[0])
+                print(val)
+                return redirect(url_for("loginAdm")) if val[0] == 200 else render_template("CadastroAdmin.html")
             else:
                 print("chave não aceita!")
     return  render_template("CadastroAdmin.html")
@@ -172,7 +159,7 @@ def telaAdm():
 def CadastroUsuario():
     if request.method == "POST":
         try:
-            alerta = crud.adiciona("usuario",[request.form.get("nomeUser"), request.form.get("nomeComp"), request.form.get("email"), request.form.get("senha")])
+            alerta = crud.adiciona("usuario",[request.form.get("nomeUser"), request.form.get("nomeComp"), request.form.get("senha"), request.form.get("email")])
             print(alerta)
             if alerta[0] == 200:
                 return  render_template("TelaLogin.html")
@@ -205,17 +192,6 @@ def load(tabela):
 def send_js(path):
     return send_from_directory('js', path)
 
-# @app.route("/teste",methods=["GET","POST"])
-# def hello2():
-#     if request.method == "POST":
-#         email = request.form.get("entradaEmail")
-#         senha = request.form.get("entradaSenha")
-#         cursor = cmx.connection.cursor()
-#         string_sql = f"INSERT INTO usuario (email,senha) VALUES ('{email}','{senha}')"
-#         cursor.execute(string_sql)
-#         cmx.connection.commit()
-#         print(email, senha)
-#     return  render_template("teste.html")
 
 if __name__ == "__main__":
     app.config.from_object(config["gabconfig"])
