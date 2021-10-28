@@ -15,7 +15,7 @@ app = Flask(__name__, static_url_path='/static')
 app.secret_key = "test"
 app.permanent_session_lifetime = timedelta(minutes=5)
 CORS(app) 
-# app.config["SESSION_PERMANENT"] = True
+app.config["SESSION_PERMANENT"] = True
 cmx = MySQL(app)
 import crud
 
@@ -43,59 +43,54 @@ def logoutA():
 @app.route("/home",methods=["GET","POST"])
 def login():
     if  'User' in session:
-            if 'Jogo' in session:
-                aux = session["User"]
-                data = crud.seleciona_um("usuario",aux)
-                print("data=",data)
-                session["aviso"] = "Pesquisar"
-                typeP = request.form.get("btnP")
-                print("tp:",typeP)
-                dataP = request.form.get("pesq")
-                if dataP != "" and typeP == "Conta":
-                    try:
-                        print(dataP)
-                        cursor = cmx.connection.cursor()
-                        string_sql = f"SELECT * FROM usuario WHERE nome_de_usuario = '{dataP}'"
-                        cursor.execute(string_sql)
-                        dataP = cursor.fetchall()
-                        print(dataP)
-                        if dataP != ():
-                            return  render_template("TelaUser.html", sess=session['User'],jog=session['Jogo'], data = dataP, flag = "False")
-                        print("telaUSErR:")
-                        return  render_template("TelaUser.html", sess=session['User'],jog=session['Jogo'], data = data, flag = "True")
-                    except Exception as ax:
-
-                        print("exceção=" , ax)
-                if dataP != "" and typeP == "Partida":
-                    print("Partidasssa:")
-                return  render_template("TelaUser.html", sess=session['User'],jog=session['Jogo'], data = data, flag = "False")
-            game = request.form.get("jogo")
-            if 'Admin' in session:
-                return redirect(url_for("loginAdm"))
-            if game != None:
-                session["Jogo"] = game
-                return redirect(url_for("login"))
-            return  render_template("TelaJogos.html")
+        return redirect(url_for("telaUser"))
     if request.method == "POST":
-        session.permanent = True
         try:
             nomeUser = request.form.get("nomeUser")
             senhaUser = request.form.get("senhaUser")
-            senha = crud.seleciona_um("usuario", nomeUser)
+            senha = crud.seleciona_um(nomeUser,"senha","usuario", "user")
             print("senha",senha)
+            print("senhaUser",senhaUser)
             if senha == ():
                 print("usuario não encontrado!")
                 return  render_template("TelaR.html", data="usuario não encontrado!")
-            elif senha!= None and senha[0][3] == senhaUser and nomeUser!=None:
+            elif senha!= None and senha[0][0] == senhaUser and nomeUser!=None:
                 session["User"] = nomeUser
-                return redirect(url_for("login"))
+                return redirect(url_for("telaUser"))
             else:
                 print("senha invalida")
                 return  render_template("TelaR.html", data="Senha invalida!")
-
         except Exception as ax:
             print(ax)
     return  render_template("TelaLogin.html")
+
+@app.route("/telaUser",methods=["GET","POST"])
+def telaUser():
+    if  'User' in session:
+        if 'Admin' in session:
+            return redirect(url_for("loginAdm"))
+        if 'Jogo' in session:
+            data = crud.seleciona_um(session["User"],"*","usuario","user")  
+            typeP = request.form.get("btnP")
+            dataP = request.form.get("pesq")
+            print("tp:",typeP)  ## verificar
+            if dataP != "" and typeP == "Conta":
+                try:
+                    dataP = crud.seleciona_um(dataP,"*","usuario","user")
+                    if dataP != ():
+                        return  render_template("TelaUser.html", sess=session['User'],jog=session['Jogo'], data = dataP, flag = "False")
+                    return  render_template("TelaUser.html", sess=session['User'],jog=session['Jogo'], data = data, flag = "True")
+                except Exception as ax:
+                    print("exceção=" , ax)
+            if dataP != "" and typeP == "Partida":
+                print("Partidasssa:")
+            return  render_template("TelaUser.html", sess=session['User'],jog=session['Jogo'], data = data, flag = "False")
+        game = request.form.get("jogo")
+        if game != None:
+            session["Jogo"] = game
+            return redirect(url_for("telaUser"))
+        return  render_template("TelaJogos.html")
+    return redirect(url_for("login"))
 
 @app.route("/CadastroAdmin",methods=["GET","POST"])
 def CadastroAdmin():
@@ -122,7 +117,6 @@ def loginAdm():
         print("homimacaco")
         return redirect(url_for("telaAdm"))
     if request.method == "POST":
-        session.permanent = True
         try:
             nomeUser = request.form.get("nomeUser")
             senhaUser = request.form.get("senhaUser")
@@ -159,10 +153,10 @@ def telaAdm():
 def CadastroUsuario():
     if request.method == "POST":
         try:
-            alerta = crud.adiciona("usuario",[request.form.get("nomeUser"), request.form.get("nomeComp"), request.form.get("senha"), request.form.get("email")])
-            print(alerta)
+            alerta = crud.adiciona("usuario",(request.form.get("nomeUser"), request.form.get("nomeComp"), request.form.get("senha"), request.form.get("email")))
+            print("alerta:",alerta)
             if alerta[0] == 200:
-                return  render_template("TelaLogin.html")
+                return  render_template("login.html")
         except Exception as ax:
             print(ax)
     return  render_template("CadastroUsuario.html")

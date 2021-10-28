@@ -1,8 +1,8 @@
 from app import cmx
 
 variaveis = {
-    'usuario': f"INSERT INTO usuario (user, nome, senha, email, status_user, ) VALUES (%s, %s, %s, %s, 'false')",
-    'administrador': f"INSERT INTO administrador (user, nome, senha, email, chave) VALUES (%s, %s, %s, %s, %s)",
+    'usuario': f"INSERT INTO usuario (user, nome, senha, email, status_user) VALUES ('%s', '%s', '%s', '%s', 'false')",
+    'administrador': f"INSERT INTO administrador (user, nome, senha, email, chave) VALUES ('%s', '%s', '%s', '%s', '%s')",
     'seleciona_um' :f"SELECT %s FROM %s WHERE %s = '%s'",
     'atualiza' : f"UPDATE %s SET user = '%s', nome = '%s',  senha = '%s', email='%s', chave='' WHERE IDadministrador = %s",
     'exclui'    : f"DELETE FROM %s WHERE %s='%s'"
@@ -30,9 +30,11 @@ def seleciona_todos(tipo):
 # Adiciona
 def adiciona(tipo, data):
     val = valida(tipo, data) if (tipo == "usuario" or tipo == "administrador") else 200
+    print("testinha:",variaveis[tipo]%data)
+    print("val:",val)
     if val[0] == 200:
         cursor = cmx.connection.cursor()
-        cursor.execute(variaveis[tipo], data)
+        cursor.execute(variaveis[tipo]%data)
         cmx.connection.commit()
         return val
     else:
@@ -54,7 +56,7 @@ def atualiza(tipo,data,id):
 def exclui(tipo, id, atributo = "user"):
     if(seleciona_um(id,"*",tipo,atributo)[0] != 400):
         cursor = cmx.connection.cursor()
-        print("exclui=",variaveis["seleciona_um"]%(select,tipo, atributo, id))
+        print("exclui=",variaveis["seleciona_um"]%(tipo, atributo, id))
         cursor.execute(variaveis["exclui"]%(tipo, atributo, id))
         cmx.connection.commit()
         return 200,'usuario excluido!'
