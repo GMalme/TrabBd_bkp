@@ -33,7 +33,7 @@ def adiciona(tipo, data):
     print("testinha:",variaveis[tipo]%data)
     print("val:",val)
     if val[0] == 200:
-        cursor = cmx.connection.cursor()
+        cursor = cmx.connection.cursor() 
         cursor.execute(variaveis[tipo]%data)
         cmx.connection.commit()
         return val

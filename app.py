@@ -114,28 +114,23 @@ def CadastroAdmin():
 @app.route("/loginAdm",methods=["GET","POST"])
 def loginAdm():
     if 'Admin' in session:
-        print("homimacaco")
+        print("Redirect for telaAdm by login")
         return redirect(url_for("telaAdm"))
     if request.method == "POST":
         try:
             nomeUser = request.form.get("nomeUser")
             senhaUser = request.form.get("senhaUser")
-            cursor = cmx.connection.cursor()
-            string_sql = f"SELECT user,senha FROM administrador WHERE user = '{nomeUser}'"
-            cursor.execute(string_sql)
-            senha = cursor.fetchall()
+            senha = crud.seleciona_um(nomeUser,"senha","administrador", "user")
             if senha == ():
-                print("usuario não encontrado!")
-                alerta = "usuario não encontrado!"
+                print("usuario não encontrado!")  #retirar 
                 return  render_template("LoginAdm.html", flag = "True")
-            elif senha!= None and senha[0][1] == senhaUser and nomeUser!=None:
+            elif senha!= None and senha[0][0] == senhaUser and nomeUser!=None:
                 print("entro")
                 session["User"] = nomeUser
                 session["Admin"] = nomeUser
                 return redirect(url_for("telaAdm"))
             else:
-                print("senha invalida")
-                alerta = "Senha invalida!"
+                print("senha invalida")   #retirar 
                 return  render_template("LoginAdm.html",  flag = "True")
 
         except Exception as ax:
@@ -184,6 +179,7 @@ def load(tabela):
 
 @app.route('/js/<path:path>')
 def send_js(path):
+    print("1")
     return send_from_directory('js', path)
 
 

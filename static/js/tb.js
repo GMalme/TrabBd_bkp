@@ -1,7 +1,7 @@
 function laj() {
     document.querySelectorAll('ajx').forEach(link => {
-        const conteudo = document.getElementById('conteudo')
-        console.log(link.href)
+        //const conteudo = document.getElementById('conteudo') retirar!
+        //console.log(link.href) retirar
         link.addEventListener('click', function (e) {
             console.log(e.target.dataset.value)
             e.preventDefault()
