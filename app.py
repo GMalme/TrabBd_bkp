@@ -20,7 +20,8 @@ cmx = MySQL(app)
 import crud
 
 headers = {
-    "usuario": ("id", "nome", "user", "senha", "on/off", "email", "blob") 
+    "table_user": ("id", "nome", "user", "senha", "on/off", "email", "blob"),
+    "table_admin": ("id", "nome", "user", "senha", "on/off", "email", "blob")
 }
 
 
@@ -173,29 +174,26 @@ def pbt():
 
 @app.route("/load/<tabela>",methods=["GET","POST"]) 
 def load(tabela): 
-    print("tabela:",tabela)
-    headings = headers["usuario"]
-    data = crud.seleciona_todos("usuario")
-    # data = ( 
-    #     ("rolf","software eng","400"), 
-    #     ("juca","mecanico","2200"), 
-    #     ("hugo","goleiro","600"), 
-    #     ("rafa","motovlog","2600") 
-    # )
-    try:
-        teste = crud.seleciona_todos("usuario")
-        # teste = crud.seleciona_um("gabes","senha","administrador", "user")
-        print(teste)
-    except Exception as ax:
-        print(ax)
-
-    return  render_template("/tabelasAdm/" + tabela +  ".html",data=data, headings=headings)
+    # print("tabela:",tabela)  # retirar
+    headings = headers[tabela]
+    aux = "usuario" if tabela =="table_user" else "administrador"
+    data = crud.seleciona_todos(aux)
+    # print(aux)  # retirar
+    # print(data)  # retirar
+    return  render_template("/tabelasAdm/" + tabela +  ".html",data=data, headings=headings, user=aux)
 
 
 @app.route('/js/<path:path>')
 def send_js(path):
     print("1")
     return send_from_directory('js', path)
+
+@app.route("/simula")
+def simula():
+    # crud.adiciona("usuario",)
+    
+    
+    return  render_template("/tabelasAdm/" + tabela +  ".html",data=data, headings=headings, user=aux)
 
 
 if __name__ == "__main__":
