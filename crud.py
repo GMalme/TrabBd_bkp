@@ -22,7 +22,8 @@ def seleciona_um(id, select ="*", tipo = 'administrador', atributo = 'IDadminist
 # Retorna todos
 def seleciona_todos(tipo):
     cursor = cmx.connection.cursor()
-    string_sql = f"SELECT * FROM '{tipo}''"
+    string_sql = f"SELECT * FROM {tipo}"
+    print("string;",string_sql)
     cursor.execute(string_sql)
     data = cursor.fetchall()
     return data

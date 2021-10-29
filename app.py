@@ -19,6 +19,12 @@ app.config["SESSION_PERMANENT"] = True
 cmx = MySQL(app)
 import crud
 
+headers = {
+    "usuario": ("id", "nome", "user", "senha", "on/off", "email", "blob") 
+}
+
+
+
 @app.route("/")
 def helloworld():
     return "Hello, cross-origin-world"
@@ -151,7 +157,8 @@ def CadastroUsuario():
             alerta = crud.adiciona("usuario",(request.form.get("nomeUser"), request.form.get("nomeComp"), request.form.get("senha"), request.form.get("email")))
             print("alerta:",alerta)
             if alerta[0] == 200:
-                return  render_template("login.html")
+                print("entrou")
+                return redirect(url_for("login"))
         except Exception as ax:
             print(ax)
     return  render_template("CadastroUsuario.html")
@@ -166,14 +173,22 @@ def pbt():
 
 @app.route("/load/<tabela>",methods=["GET","POST"]) 
 def load(tabela): 
-    print("tabela:",tabela) 
-    headings = ("name", "role", "salario") 
-    data =( 
-        ("rolf","software eng","400"), 
-        ("juca","mecanico","2200"), 
-        ("hugo","goleiro","600"), 
-        ("rafa","motovlog","2600") 
-    ) 
+    print("tabela:",tabela)
+    headings = headers["usuario"]
+    data = crud.seleciona_todos("usuario")
+    # data = ( 
+    #     ("rolf","software eng","400"), 
+    #     ("juca","mecanico","2200"), 
+    #     ("hugo","goleiro","600"), 
+    #     ("rafa","motovlog","2600") 
+    # )
+    try:
+        teste = crud.seleciona_todos("usuario")
+        # teste = crud.seleciona_um("gabes","senha","administrador", "user")
+        print(teste)
+    except Exception as ax:
+        print(ax)
+
     return  render_template("/tabelasAdm/" + tabela +  ".html",data=data, headings=headings)
 
 
